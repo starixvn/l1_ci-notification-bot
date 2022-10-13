@@ -1,0 +1,16 @@
+{
+  "name": "ci-notification-bot",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "start:dev": "nodemon --es-module-specifier-resolution=node"
+  },
+  "dependencies": {
+    "express": "4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.20"
+  }
+}
