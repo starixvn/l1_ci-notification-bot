@@ -1,11 +1,15 @@
-export class Queue {
+import { EventEmitter } from "events";
+
+export class Queue extends EventEmitter {
   items = [];
 
   enqueue(item) {
+    this.emit("enqueue", item);
     this.items.push(item);
   }
 
   dequeue() {
+    this.emit("dequeue", item);
     return this.items.shift();
   }
 

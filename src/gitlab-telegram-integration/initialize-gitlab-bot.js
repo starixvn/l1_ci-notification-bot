@@ -1,4 +1,9 @@
-import { createPipelineHookHandler, PIPELINE_HOOK_EVENT } from "./handlers";
+import {
+  createJobHookHandler,
+  createPipelineHookHandler,
+  JOB_HOOK_EVENT,
+  PIPELINE_HOOK_EVENT,
+} from "./handlers";
 
 /**
  * @param {import("../gitlab-webhook").Webhook} webhook
@@ -7,4 +12,5 @@ import { createPipelineHookHandler, PIPELINE_HOOK_EVENT } from "./handlers";
  */
 export function initializeGitlabBot(webhook, bot) {
   webhook.on(PIPELINE_HOOK_EVENT, createPipelineHookHandler(bot));
+  webhook.on(JOB_HOOK_EVENT, createJobHookHandler(bot));
 }

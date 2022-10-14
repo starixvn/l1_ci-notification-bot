@@ -53,7 +53,7 @@ export function createPipelineHookHandler(bot) {
       .finally(() => {
         processing = false;
       });
-  }, 500);
+  }, 100);
 
   return async (data) => {
     pipelineQueue.enqueue(data);
