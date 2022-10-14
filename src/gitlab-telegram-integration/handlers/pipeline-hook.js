@@ -3,33 +3,35 @@ import { addMessages, getMessages, pipelineQueue } from "../storages";
 
 export const PIPELINE_HOOK_EVENT = "Pipeline Hook";
 
+/**
+ * @param {import("telegraf").Telegraf} bot
+ */
 export async function sendMessageToTelegram(bot, pipeline) {
   const id = pipeline.object_attributes.id;
-  const conversations = process.env.CONVERSATION_IDS.split(",");
   const messages = getMessages(id);
   const keyboard = getPipelineKeyboard(pipeline);
   const message = getPipelineMessage(pipeline);
 
   if (!messages) {
+    const conversations = process.env.CONVERSATION_IDS.split(",");
     const sentMessages = await Promise.all(
       conversations.map((id) => bot.telegram.sendMessage(id, message, keyboard))
     );
     const transformedMessages = sentMessages.map((message) => ({
-      message_id: message.message_id,
+      messageId: message.message_id,
+      chatId: message.chat.id,
     }));
 
     addMessages(id, transformedMessages);
   } else {
-    for (const chatId of conversations) {
-      for (const sentMessage of messages) {
-        await bot.telegram.editMessageText(
-          chatId,
-          sentMessage.message_id,
-          null,
-          message,
-          keyboard
-        );
-      }
+    for (const sentMessage of messages) {
+      await bot.telegram.editMessageText(
+        sentMessage.chatId,
+        sentMessage.messageId,
+        null,
+        message,
+        keyboard
+      );
     }
   }
 }
