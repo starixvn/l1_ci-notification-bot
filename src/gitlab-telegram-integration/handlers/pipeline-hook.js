@@ -24,7 +24,11 @@ export function createPipelineHookHandler(bot) {
   const conversations = process.env.CONVERSATION_IDS.split(",");
 
   return async (data) => {
-    const keyboards = data.builds.map((build) => {
+    const stages = data.object_attributes.stages;
+    const builds = data.builds.sort(
+      (a, b) => stages.indexOf(a) - stages.indexOf(b)
+    );
+    const keyboards = builds.map((build) => {
       const { name, status } = build;
 
       return Markup.button.url(
