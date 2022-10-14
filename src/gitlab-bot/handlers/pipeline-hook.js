@@ -7,8 +7,9 @@ export function createPipelineHookHandler(bot) {
   const conversations = process.env.CONVERSATION_IDS.split(",");
 
   return (data) => {
-    conversations.forEach((id) => {
-      bot.telegram.sendMessage(id, JSON.stringify(data, null, 2));
-    });
+    // conversations.forEach((id) => {
+    //   bot.telegram.sendMessage(id, JSON.stringify(data, null, 2));
+    // });
+    console.log(data);
   };
 }
