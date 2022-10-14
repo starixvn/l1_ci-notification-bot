@@ -9,7 +9,7 @@ export class Queue extends EventEmitter {
   }
 
   dequeue() {
-    this.emit("dequeue", item);
+    this.emit("dequeue", this.peek());
     return this.items.shift();
   }
 
