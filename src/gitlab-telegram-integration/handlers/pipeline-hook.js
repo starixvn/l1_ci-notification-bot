@@ -11,12 +11,12 @@ export async function sendMessageToTelegram(bot, pipeline) {
   const messages = getMessages(id);
   const keyboard = getPipelineKeyboard(pipeline);
   const message = getPipelineMessage(pipeline);
-  const extra = {...keyboard, parse_mode: "HTML"}
+  const extra = { ...keyboard, parse_mode: "HTML" };
 
   if (!messages) {
     const conversations = process.env.CONVERSATION_IDS.split(",");
     const sentMessages = await Promise.all(
-      conversations.map((id) => bot.telegram.sendMessage(id, message, extra)
+      conversations.map((id) => bot.telegram.sendMessage(id, message, extra))
     );
     const transformedMessages = sentMessages.map((message) => ({
       messageId: message.message_id,
