@@ -14,7 +14,7 @@ const statuses = {
 
 export function getPipelineKeyboard(pipeline) {
   const stages = pipeline.object_attributes.stages;
-  const jobSorter = (a, b) => stages.indexOf(a) - stages.indexOf(b);
+  const jobSorter = (a, b) => stages.indexOf(b) - stages.indexOf(a);
   const jobs = pipeline.builds.sort(jobSorter);
 
   const keyboards = jobs.map((job) => {
