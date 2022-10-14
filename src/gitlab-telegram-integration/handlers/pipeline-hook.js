@@ -1,73 +1,61 @@
-import { Markup } from "telegraf";
+import { getPipelineKeyboard, getPipelineMessage } from "../renders";
+import { addMessages, getMessages, pipelineQueue } from "../storages";
 
 export const PIPELINE_HOOK_EVENT = "Pipeline Hook";
 
-const statuses = {
-  failed: "❌",
-  warning: "⚠️",
-  pending: "⏸️",
-  running: "🟢",
-  manual: "⚙️",
-  scheduled: "🔄",
-  canceled: "✖️",
-  success: "✅",
-  skipped: "⚫",
-  created: "⚪",
-};
+export async function sendMessageToTelegram(bot, pipeline) {
+  const id = pipeline.object_attributes.id;
+  const conversations = process.env.CONVERSATION_IDS.split(",");
+  const messages = getMessages(id);
+  const keyboard = getPipelineKeyboard(pipeline);
+  const message = getPipelineMessage(pipeline);
 
-const cached = {};
+  if (!messages) {
+    const sentMessages = await Promise.all(
+      conversations.map((id) => bot.telegram.sendMessage(id, message, keyboard))
+    );
+    const transformedMessages = sentMessages.map((message) => ({
+      message_id: message.message_id,
+    }));
+
+    addMessages(id, transformedMessages);
+  } else {
+    for (const chatId of conversations) {
+      for (const sentMessage of messages) {
+        await bot.telegram.editMessageText(
+          chatId,
+          sentMessage.message_id,
+          null,
+          message,
+          keyboard
+        );
+      }
+    }
+  }
+}
 
 /**
  * @param {import("telegraf").Telegraf} bot
  */
 export function createPipelineHookHandler(bot) {
-  const conversations = process.env.CONVERSATION_IDS.split(",");
+  let processing = false;
+
+  setInterval(() => {
+    if (processing || pipelineQueue.isEmpty()) {
+      return;
+    }
+
+    processing = true;
+    const pipeline = pipelineQueue.dequeue();
+
+    sendMessageToTelegram(bot, pipeline)
+      .catch((error) => console.error(error))
+      .finally(() => {
+        processing = false;
+      });
+  }, 500);
 
   return async (data) => {
-    const stages = data.object_attributes.stages;
-    const builds = data.builds.sort(
-      (a, b) => stages.indexOf(a) - stages.indexOf(b)
-    );
-    const keyboards = builds.map((build) => {
-      const { name, status } = build;
-
-      return Markup.button.url(
-        `${statuses[status]} ${name}`,
-        "https://google.com"
-      );
-    });
-    const keyboard = Markup.inlineKeyboard(keyboards, { columns: 2 });
-
-    if (cached[data.object_attributes.id]) {
-      cached[data.object_attributes.id].data = data;
-      const messages = cached[data.object_attributes.id].messages;
-
-      conversations.forEach((id) => {
-        messages.forEach((message) => {
-          bot.telegram.editMessageText(
-            id,
-            message.message_id,
-            null,
-            data.object_attributes.ref,
-            keyboard
-          );
-        });
-      });
-    } else {
-      const messages = await Promise.all(
-        conversations.map((id) =>
-          bot.telegram.sendMessage(
-            id,
-            data.object_attributes.ref,
-            Markup.inlineKeyboard(keyboards, { columns: 2 })
-          )
-        )
-      );
-
-      cached[data.object_attributes.id] = {
-        messages: messages,
-        data: data,
-      };
-    }
+    pipelineQueue.enqueue(data);
   };
 }
