@@ -16,8 +16,6 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", defaultHandler);
 app.post("/", webhookHandler(webhook));
 
-webhook.on("*", console.log);
-
 initializeGitlabBot(webhook, bot);
 
 bot.launch();
