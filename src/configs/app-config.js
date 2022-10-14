@@ -1,1 +1,4 @@
-export default {};
+process.env.PORT = 5000;
+process.env.TELEGRAM_BOT_TOKEN =
+  "5617603402:AAFtmaTm-C8LnaDnd0Ey3FksR5kyExUdt8U";
+process.env.CONVERSATION_IDS = "-1001576765297";
