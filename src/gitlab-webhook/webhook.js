@@ -5,6 +5,7 @@ export const EVENT_ERROR = "error";
 export class Webhook extends EventEmitter {
   constructor(options) {
     super();
+    this.setMaxListeners(0);
 
     this.token = options.token;
     this.parser = options.parser;

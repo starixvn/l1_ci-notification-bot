@@ -1,15 +1,16 @@
-export const DEPLOYMENT_HOOK_EVENT = "Deployment Hook";
+export const JOB_HOOK_EVENT = "Job Hook";
 
 /**
  * @param {import("telegraf").Telegraf} bot
  */
-export function createDeploymentHookHandler(bot) {
+export function createJobHookHandler(bot) {
   const conversations = process.env.CONVERSATION_IDS.split(",");
 
   return (data) => {
     // conversations.forEach((id) => {
     //   bot.telegram.sendMessage(id, JSON.stringify(data, null, 2));
     // });
+
     console.log(data);
   };
 }

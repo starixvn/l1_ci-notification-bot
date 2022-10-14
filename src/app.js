@@ -4,7 +4,7 @@ import packageJson from "../package.json" assert { type: "json" };
 import { defaultHandler, webhookHandler } from "./express-handlers";
 import { createWebhook } from "./gitlab-webhook";
 import { createBot } from "./telegram-bot";
-import { initializeGitlabBot } from "./gitlab-bot";
+import { initializeGitlabBot } from "./gitlab-telegram-integration";
 
 const app = express();
 const port = process.env.PORT || 5000;
