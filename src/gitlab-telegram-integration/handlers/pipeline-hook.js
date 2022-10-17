@@ -10,8 +10,8 @@ export async function sendMessageToTelegram(bot, pipeline) {
   const id = pipeline.object_attributes.id;
   const messages = getMessages(id);
   const keyboard = getPipelineKeyboard(pipeline);
-  const message = getPipelineMessage(pipeline);
-  const extra = { ...keyboard, parse_mode: "HTML" };
+  const { message, format } = getPipelineMessage(pipeline);
+  const extra = { ...keyboard, ...format };
 
   if (!messages) {
     const conversations = process.env.CONVERSATION_IDS.split(",");
