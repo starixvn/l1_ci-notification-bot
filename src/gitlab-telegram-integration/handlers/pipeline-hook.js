@@ -1,5 +1,5 @@
-import { getPipelineKeyboard, getPipelineMessage } from "../renders";
-import { addMessages, getMessages, pipelineQueue } from "../storages";
+import { getPipelineKeyboard, getPipelineMessage } from "../renders/index.js";
+import { addMessages, getMessages, pipelineQueue } from "../storages/index.js";
 
 export const PIPELINE_HOOK_EVENT = "Pipeline Hook";
 
@@ -37,10 +37,7 @@ export async function sendMessageToTelegram(bot, pipeline) {
   }
 }
 
-/**
- * @param {import("telegraf").Telegraf} bot
- */
-export function createPipelineHookHandler(bot) {
+function createCron(bot) {
   let processing = false;
 
   setInterval(() => {
@@ -57,8 +54,22 @@ export function createPipelineHookHandler(bot) {
         processing = false;
       });
   }, 100);
+}
 
-  return async (data) => {
-    pipelineQueue.enqueue(data);
+/**
+ * @param {import("telegraf").Telegraf} bot
+ */
+export function createPipelineHookHandler(bot) {
+  createCron(bot);
+
+  return async (pipeline) => {
+    if (
+      pipeline?.builds?.length === 0 ||
+      pipeline.object_attributes.source === "parent_pipeline"
+    ) {
+      return;
+    }
+
+    pipelineQueue.enqueue(pipeline);
   };
 }

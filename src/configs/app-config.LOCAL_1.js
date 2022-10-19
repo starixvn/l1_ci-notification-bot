@@ -1,0 +1,4 @@
+process.env.PORT = 5000;
+process.env.TELEGRAM_BOT_TOKEN =
+  "5763612199:AAFncyRHzhAPsBx2cBfJJecUdcf4epg5QH8";
+process.env.CONVERSATION_IDS = "-1001576765297";

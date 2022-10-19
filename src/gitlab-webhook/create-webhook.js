@@ -1,5 +1,5 @@
-import { expressParser } from "./express-parser";
-import { Webhook } from "./webhook";
+import { expressParser } from "./express-parser.js";
+import { Webhook } from "./webhook.js";
 
 export function createWebhook(options = {}) {
   if (!options.parser) {

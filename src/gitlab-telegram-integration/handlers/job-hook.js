@@ -1,4 +1,4 @@
-import { getLatestPipeline, pipelineQueue } from "../storages";
+import { getLatestPipeline, pipelineQueue } from "../storages/index.js";
 
 export const JOB_HOOK_EVENT = "Job Hook";
 

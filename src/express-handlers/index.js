@@ -1,2 +1,2 @@
-export * from "./default-handler";
-export * from "./webhook-handler";
+export * from "./default-handler.js";
+export * from "./webhook-handler.js";
