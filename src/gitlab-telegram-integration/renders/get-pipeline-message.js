@@ -61,9 +61,14 @@ function toHHMMSS(input) {
 }
 
 function getTitle(pipeline) {
-  const { project, object_attributes } = pipeline;
+  const { project, object_attributes, builds } = pipeline;
 
-  const status = STATUS_MAPPER[object_attributes.status];
+  const failedJob = builds.find((job) => job.status === "failed");
+  const statusString =
+    object_attributes.status === "success" && !!failedJob
+      ? "warning"
+      : object_attributes.status;
+  const status = STATUS_MAPPER[statusString];
 
   const pipelineUrl = `${project.web_url}/-/pipelines/${object_attributes.id}`;
 
