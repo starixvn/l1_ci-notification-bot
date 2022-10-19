@@ -1,1 +1,1 @@
-export * from "./create-bot";
+export * from "./create-bot.js";

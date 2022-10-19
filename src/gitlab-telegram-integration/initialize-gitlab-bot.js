@@ -3,7 +3,7 @@ import {
   createPipelineHookHandler,
   JOB_HOOK_EVENT,
   PIPELINE_HOOK_EVENT,
-} from "./handlers";
+} from "./handlers/index.js";
 
 /**
  * @param {import("../gitlab-webhook").Webhook} webhook

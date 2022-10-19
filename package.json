@@ -5,7 +5,8 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start:dev": "nodemon --es-module-specifier-resolution=node"
+    "start:dev": "nodemon --es-module-specifier-resolution=node",
+    "start": "node --es-module-specifier-resolution=node ."
   },
   "dependencies": {
     "express": "4.18.2",

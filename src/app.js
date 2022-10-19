@@ -1,10 +1,10 @@
-import "./configs/app-config";
+import "./configs/app-config.js";
 import express from "express";
 import packageJson from "../package.json" assert { type: "json" };
-import { defaultHandler, webhookHandler } from "./express-handlers";
-import { createWebhook } from "./gitlab-webhook";
-import { createBot } from "./telegram-bot";
-import { initializeGitlabBot } from "./gitlab-telegram-integration";
+import { defaultHandler, webhookHandler } from "./express-handlers/index.js";
+import { createWebhook } from "./gitlab-webhook/index.js";
+import { createBot } from "./telegram-bot/index.js";
+import { initializeGitlabBot } from "./gitlab-telegram-integration/index.js";
 
 const app = express();
 const port = process.env.PORT || 5000;

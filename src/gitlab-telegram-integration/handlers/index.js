@@ -1,2 +1,2 @@
-export * from "./job-hook";
-export * from "./pipeline-hook";
+export * from "./job-hook.js";
+export * from "./pipeline-hook.js";

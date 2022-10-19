@@ -1,1 +1,1 @@
-export * from "./initialize-gitlab-bot";
+export * from "./initialize-gitlab-bot.js";
